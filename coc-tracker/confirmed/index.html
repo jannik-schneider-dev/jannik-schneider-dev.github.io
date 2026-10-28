@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CoC Tracker – E-Mail bestätigt</title>
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; display: grid; place-items: center; background: #121a26; color: #f4f7fb;
+         font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .card { max-width: 460px; margin: 16px; background: #1d2838; border: 2px solid #070b12; border-radius: 16px; padding: 28px 24px; text-align: center; }
+  h1 { color: #f6c443; margin: 0 0 8px; font-size: 1.5rem; }
+  p { margin: 8px 0; }
+  .muted { color: #8d9db5; font-size: .9rem; }
+  .err { display: none; color: #e5483f; }
+</style>
+</head>
+<body>
+<div class="card">
+  <h1 id="title">✅ E-Mail bestätigt</h1>
+  <p id="de">Dein Konto ist aktiviert. Geh zurück in die App und melde dich an.</p>
+  <p id="en" class="muted">Your account is active. Go back to the app and sign in.</p>
+  <p id="err" class="err">Der Link ist abgelaufen oder wurde schon benutzt. Registriere dich in der App neu oder melde dich an. / The link expired or was used already - sign in or sign up again in the app.</p>
+</div>
+<script>
+  // Supabase appends an error to the URL when the link expired
+  if (/error/.test(location.hash + location.search)) {
+    document.getElementById('title').textContent = 'Link nicht mehr gültig';
+    document.getElementById('de').style.display = 'none';
+    document.getElementById('en').style.display = 'none';
+    document.getElementById('err').style.display = 'block';
+  }
+</script>
+</body>
+</html>
