@@ -1,0 +1,28 @@
+﻿<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Einladung – AI Autoclicker</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<main>
+  <h1>🎁 Du wurdest eingeladen!</h1>
+  <p>Mit diesem Code bekommt ihr beide 20 Gratis-Coins für KI-Skripte.</p>
+  <div class="card">
+    <p>Dein Code: <b id="code" style="font-size:24px;letter-spacing:3px;color:#22d3ee">—</b></p>
+    <p><a class="btn" id="store" href="#">App holen</a></p>
+    <p><a id="open" href="#">App schon installiert? Hier öffnen</a></p>
+  </div>
+</main>
+<script>
+  // The code travels to the Play Store as install referrer, the app redeems it on first start.
+  const code = (new URLSearchParams(location.search).get('code') || '').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 12);
+  document.getElementById('code').textContent = code || '—';
+  const referrer = encodeURIComponent('code=' + code + '&utm_source=invite');
+  document.getElementById('store').href = 'https://play.google.com/store/apps/details?id=com.jnik.aiautoclicker&referrer=' + referrer;
+  document.getElementById('open').href = 'aiautoclicker://invite/' + code;
+</script>
+</body>
+</html>

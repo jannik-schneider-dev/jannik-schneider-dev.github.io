@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Skript – AI Autoclicker</title>
+  <link rel="stylesheet" href="../style.css" />
+</head>
+<body>
+<main>
+  <h1>🤖 Ein AI-Autoclicker-Skript wurde mit dir geteilt</h1>
+  <p>Öffne es in der App und teste es kostenlos.</p>
+  <div class="card">
+    <p><a class="btn" id="open" href="#">In der App öffnen</a></p>
+    <p><a id="store" href="https://play.google.com/store/apps/details?id=com.jnik.aiautoclicker">App noch nicht installiert?</a></p>
+  </div>
+</main>
+<script>
+  const id = (new URLSearchParams(location.search).get('id') || '').replace(/[^0-9a-f-]/gi, '').slice(0, 36);
+  const deepLink = 'aiautoclicker://s/' + id;
+  document.getElementById('open').href = deepLink;
+  if (id) setTimeout(() => { location.href = deepLink; }, 300);
+</script>
+</body>
+</html>
