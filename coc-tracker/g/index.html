@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>TH Tracker – Gruppe / Group</title>
+<link rel="icon" href="icon.png">
+<style>
+  :root { color-scheme: dark; }
+  body { margin: 0; min-height: 100vh; min-height: 100dvh; display: grid; place-items: center; background: #121a26; color: #f4f7fb;
+         font: 16px/1.6 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  .card { max-width: 460px; margin: 16px; background: #1d2838; border: 2px solid #070b12; border-radius: 16px; padding: 28px 24px; text-align: center; }
+  img.icon { width: 72px; height: 72px; border-radius: 16px; }
+  h1 { color: #f6c443; margin: 8px 0 4px; font-size: 1.5rem; overflow-wrap: anywhere; }
+  p { margin: 8px 0; }
+  .muted { color: #8d9db5; font-size: .9rem; }
+  .code { display: inline-block; margin: 8px 0; padding: 6px 16px; border: 2px solid #2b3a50; border-radius: 12px; background: #0d131c;
+          font-size: 1.4rem; font-weight: 700; letter-spacing: 4px; }
+  .btn { display: block; margin: 12px 0 0; padding: 12px 16px; border-radius: 12px; background: #f6c443; color: #1b1300; font-weight: 700;
+         text-decoration: none; }
+  .btn.alt { background: #2f6fbe; color: #fff; }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <img class="icon" src="icon.png" alt="TH Tracker">
+  <h1 id="name">TH Tracker</h1>
+  <p id="members" class="muted hidden"></p>
+  <p>Du bist zu einer Gruppe eingeladen.<br><span class="muted">You are invited to a group.</span></p>
+  <div id="code" class="code"></div>
+  <a id="open" class="btn hidden" href="#">In der App öffnen / Open in the app</a>
+  <a id="play" class="btn alt" href="https://play.google.com/store/apps/details?id=com.jnik05.coctracker&amp;referrer=utm_source%3Dgroup-link">TH Tracker bei Google Play / on Google Play</a>
+  <p class="muted">Noch keine App? Installiere sie, öffne dann diesen Link noch einmal – oder gib den Code in der App unter „Gruppen“ ein. Beitreten geht mit einem bestätigten Spieler-Tag.</p>
+  <p class="muted">No app yet? Install it, then open this link again – or enter the code in the app under "Groups". Joining takes a verified player tag.</p>
+  <p id="bad" class="hidden" style="color:#e5483f">Dieser Link ist unvollständig. / This link is incomplete.</p>
+</div>
+<script>
+  // ?c=CODE&k=TOKEN - the code of the group and the secret of its invite link (the manager can renew it)
+  var q = new URLSearchParams(location.search);
+  var code = (q.get('c') || '').toUpperCase();
+  var token = q.get('k') || '';
+  var validCode = /^[ABDEFHKMNSTWX346]{6}$/.test(code);
+  var validToken = /^[0-9a-f]{16}$/.test(token);
+  if (!validCode) {
+    document.getElementById('bad').classList.remove('hidden');
+    document.getElementById('code').classList.add('hidden');
+  } else {
+    document.getElementById('code').textContent = code;
+    var path = 'group/' + code + (validToken ? '?k=' + token : '');
+    var play = document.getElementById('play').href;
+    var open = document.getElementById('open');
+    if (/android/i.test(navigator.userAgent)) {
+      // opens the app when it is installed, else Google Play
+      open.href = 'intent://' + path + '#Intent;scheme=coctracker;package=com.jnik05.coctracker;S.browser_fallback_url=' +
+        encodeURIComponent(play) + ';end';
+    } else {
+      open.href = 'coctracker://' + path;
+    }
+    open.classList.remove('hidden');
+    if (validToken) {
+      // name and size of the group (private groups too - the token is the invite); the key is the public one of the app
+      fetch('https://bzbzluyjiirpgedqmrac.supabase.co/rest/v1/rpc/group_by_link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', apikey: 'sb_publishable_6sfxDxnfOY7DvenSOKg_lg_bFXbq9wl' },
+        body: JSON.stringify({ p_code: code, p_token: token })
+      }).then(function (r) { return r.ok ? r.json() : []; }).then(function (rows) {
+        var g = rows && rows[0];
+        if (!g) return;
+        document.getElementById('name').textContent = g.name;
+        document.title = 'TH Tracker – ' + g.name;
+        var m = document.getElementById('members');
+        m.textContent = 'Mitglieder / Members: ' + g.members + (g.owner_name ? ' · ' + g.owner_name : '');
+        m.classList.remove('hidden');
+      }).catch(function () {});
+    }
+  }
+</script>
+</body>
+</html>
