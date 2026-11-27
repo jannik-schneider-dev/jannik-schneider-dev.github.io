@@ -1,0 +1,13 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.jnik05.coctracker",
+      "sha256_cert_fingerprints": [
+        "D7:FD:A0:92:7D:8F:5D:8C:14:4C:6B:91:1A:F1:E5:01:63:1B:75:54:A3:2C:F5:F4:66:FF:19:04:DA:FC:B3:4A",
+        "FF:EF:BB:37:96:AC:9B:EB:0C:0D:E6:51:82:96:36:A8:F2:FD:66:34:97:49:1E:A8:D5:07:25:8A:79:F8:1C:71"
+      ]
+    }
+  }
+]
